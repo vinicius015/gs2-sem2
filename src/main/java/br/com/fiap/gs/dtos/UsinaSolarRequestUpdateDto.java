@@ -1,17 +1,12 @@
 package br.com.fiap.gs.dtos;
 
 import br.com.fiap.gs.model.UsinaSolar;
+import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.modelmapper.ModelMapper;
-
-@Getter
-@Setter
-public class UsinaSolarRequestCreateDto {
+public class UsinaSolarRequestUpdateDto {
 
     private String local;
     private LocalDate inicioOperacao;
@@ -60,8 +55,9 @@ public class UsinaSolarRequestCreateDto {
         QuantidadePaineis = quantidadePaineis;
     }
 
-    public UsinaSolar toModel() {
-        return modelMapper.map(this, UsinaSolar.class);
+    public UsinaSolar toModel(Long id) {
+        UsinaSolar result = modelMapper.map(this, UsinaSolar.class);
+        result.setId(id);
+        return result;
     }
-
 }
