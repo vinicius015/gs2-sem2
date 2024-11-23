@@ -3,7 +3,12 @@ package br.com.fiap.gs.controller;
 import br.com.fiap.gs.dtos.UsinaSolarRequestCreateDto;
 import br.com.fiap.gs.dtos.UsinaSolarRequestUpdateDto;
 import br.com.fiap.gs.dtos.UsinaSolarResponseDto;
+import br.com.fiap.gs.repository.UsinaSolarRepository;
 import br.com.fiap.gs.service.UsinaSolarService;
+import br.com.fiap.gs.views.UsinaSolarCompleteView;
+import br.com.fiap.gs.views.UsinaSolarSimpleView;
+import br.com.fiap.gs.views.UsinaSolarViewType;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static br.com.fiap.gs.views.UsinaSolarViewType.SIMPLE;
+
 @RestController
 @RequestMapping("/usinas")
+@RequiredArgsConstructor
 public class UsinaSolarController {
 
     @Autowired
@@ -21,6 +29,8 @@ public class UsinaSolarController {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    private final UsinaSolarRepository usinaSolarRepository;
 
     @GetMapping
     public ResponseEntity<List<UsinaSolarResponseDto>> list() {
@@ -75,6 +85,19 @@ public class UsinaSolarController {
                                 .orElseThrow(() -> new RuntimeException("Id inexistente"))
                 );
 
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<?> findByLocal(
+            @RequestParam String local,
+            UsinaSolarViewType type) {
+
+        return switch (type) {
+            case SIMPLE ->
+                    ResponseEntity.ok().body(usinaSolarRepository.findAllByLocalContains(local, UsinaSolarSimpleView.class));
+            case COMPLETE ->
+                    ResponseEntity.ok().body(usinaSolarRepository.findAllByLocalContains(local, UsinaSolarCompleteView.class));
+        };
     }
 
 }

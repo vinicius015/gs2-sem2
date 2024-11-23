@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Data
@@ -22,11 +21,11 @@ public class UsinaSolar {
     private LocalDate inicioOperacao;
 
     @Column(precision = 16, scale = 2)
-    private BigDecimal CapacidadeEnergia;
+    private BigDecimal capacidadeEnergia;
 
     @Column(precision = 16, scale = 2)
-    private BigDecimal Area;
+    private BigDecimal area;
 
     @Column(precision = 16, scale = 2)
-    private BigDecimal QuantidadePaineis;
+    private BigDecimal quantidadePaineis;
 }
